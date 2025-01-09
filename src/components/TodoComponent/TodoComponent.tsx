@@ -1,23 +1,30 @@
 import React, {useEffect, useState} from 'react';
 import {Todo} from "../../models/ITodo.ts";
+import {getUserService} from "../../services/api.service.ts";
 
 
 const TodoComponent = () => {
-    const [todos, setITodos] = useState<Todo[]>([])
+    const [todos, setTodos] = useState<Todo[]>([])
     useEffect(() =>{
-        fetch('https://dummyjson.com/todos')
-            .then(value => value.json())
+            getUserService()
             .then(({todos}) =>{
-            setITodos(todos)
+                console.log(todos)
+            setTodos(todos)
         })
     }, [])
 
     return (
         <div>
             {
-                todos.map(item =>{
-                    <div>{item.todo}</div>
-                })
+                todos.map(item =>
+                    <div className={item.completed? 'bg-lime-600' : 'bg-red-500'} key={item.id}>
+                        <div>{item.todo}</div>
+                        <div>ID: {item.userId}</div>
+                        <hr/>
+
+                    </div>
+
+                )
             }
         </div>
     );
